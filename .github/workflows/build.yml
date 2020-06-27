@@ -11,14 +11,22 @@ jobs:
     strategy:
       matrix:
         idf:
-          - v4.0.1
+          - release/v2.0
+          - release/v2.1
+          - release/v3.0
+          - release/v3.1
+          - release/v3.2
+          - release/v3.3
+          - release/v4.0
+          - release/v4.1
+          - release/v4.2
           - master
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
           path: esp32-ds18b20-mqtt
-          submodules: recursive
+          submodules: true
 
       - name: Checkout esp-idf
         uses: actions/checkout@v2
@@ -26,7 +34,7 @@ jobs:
           path: esp-idf
           repository: espressif/esp-idf
           ref: ${{ matrix.idf }}
-          submodules: recursive
+          submodules: true
 
       - name: Cache espressif
         uses: actions/cache@v2
