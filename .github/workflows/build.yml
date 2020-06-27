@@ -1,0 +1,57 @@
+---
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    env:
+      IDF_PATH: ${{ github.workspace }}/esp-idf
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        idf:
+          - v4.0.1
+          - master
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          path: esp32-ds18b20-mqtt
+          submodules: recursive
+
+      - name: Checkout esp-idf
+        uses: actions/checkout@v2
+        with:
+          path: esp-idf
+          repository: espressif/esp-idf
+          ref: ${{ matrix.idf }}
+          submodules: recursive
+
+      - name: Cache espressif
+        uses: actions/cache@v2
+        with:
+          path: ~/.espressif
+          key: ${{ runner.os }}-espressif-${{ matrix.idf }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install espressif toolchain
+        run: ${{ env.IDF_PATH }}/install.sh
+      
+      - name: Build project
+        run: |
+          cd esp32-ds18b20-mqtt
+          source ${IDF_PATH}/export.sh
+          idf.py build
+      
+      - name: Upload app
+        uses: actions/upload-artifact@v2
+        with:
+          path: esp32-ds18b20-mqtt/build/esp32-ds18b20-mqtt.bin
+
+
+      
