@@ -11,11 +11,11 @@ jobs:
     strategy:
       matrix:
         idf:
-          - release/v2.0
-          - release/v2.1
-          - release/v3.0
-          - release/v3.1
-          - release/v3.2
+          # - release/v2.0
+          # - release/v2.1
+          # - release/v3.0
+          # - release/v3.1
+          # - release/v3.2
           - release/v3.3
           - release/v4.0
           - release/v4.1
